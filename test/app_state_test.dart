@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:smart_calendar_copy/models.dart';
+import 'package:smart_calendar_copy/models/models.dart';
 
 main() {
   group('AppState', () {

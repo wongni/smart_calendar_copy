@@ -1,4 +1,4 @@
-import 'package:smart_calendar_copy/models.dart';
+import 'package:smart_calendar_copy/models/models.dart';
 
 typedef EventAdder(Event event);
 typedef EventRemover(Event event);
