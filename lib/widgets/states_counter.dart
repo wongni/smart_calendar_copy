@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:smart_calendar_copy/keys.dart';
+import 'package:smart_calendar_copy/state_container.dart';
 
 class StatsCounter extends StatelessWidget {
-  final int numActive;
-  final int numCompleted;
-
-  StatsCounter({
-    @required this.numActive,
-    @required this.numCompleted,
-  })
+  StatsCounter()
       : super(key: AppKeys.statsCounter);
 
   @override
   Widget build(BuildContext context) {
+    final container = StateContainer.of(context);
+    final state = container.state;
+
     return new Center(
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -28,7 +25,7 @@ class StatsCounter extends StatelessWidget {
           new Padding(
             padding: const EdgeInsets.only(bottom: 24.0),
             child: new Text(
-              '$numCompleted',
+              '${state.numCompleted}',
               key: AppKeys.statsNumCompleted,
               style: Theme.of(context).textTheme.subhead,
             ),
@@ -43,7 +40,7 @@ class StatsCounter extends StatelessWidget {
           new Padding(
             padding: const EdgeInsets.only(bottom: 24.0),
             child: new Text(
-              '$numActive',
+              '${state.numActive}',
               key: AppKeys.statsNumActive,
               style: Theme.of(context).textTheme.subhead,
             ),

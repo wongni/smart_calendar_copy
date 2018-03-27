@@ -8,7 +8,7 @@ class FileStorage {
   final String tag;
   final Future<Directory> Function() getDirectory;
 
-  FileStorage(
+  const FileStorage(
     this.tag,
     this.getDirectory,
   );

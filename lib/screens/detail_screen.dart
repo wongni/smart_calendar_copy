@@ -3,24 +3,22 @@ import 'package:meta/meta.dart';
 import 'package:smart_calendar_copy/keys.dart';
 import 'package:smart_calendar_copy/models.dart';
 import 'package:smart_calendar_copy/screens/add_edit_screen.dart';
-import 'package:smart_calendar_copy/typedefs.dart';
+import 'package:smart_calendar_copy/state_container.dart';
 
 class DetailScreen extends StatelessWidget {
   final Event event;
   final Function onDelete;
-  final EventAdder addEvent;
-  final EventUpdater updateEvent;
 
   DetailScreen({
     @required this.event,
-    @required this.onDelete,
-    @required this.addEvent,
-    @required this.updateEvent,
+    @required this.onDelete
   })
       : super(key: AppKeys.eventDetailsScreen);
 
   @override
   Widget build(BuildContext context) {
+    final container  = StateContainer.of(context);
+
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('Event Details'),
@@ -48,7 +46,7 @@ class DetailScreen extends StatelessWidget {
                   child: new Checkbox(
                     value: event.complete,
                     onChanged: (complete) {
-                      updateEvent(event, complete: !event.complete);
+                      container.updateEvent(event, complete: !event.complete);
                     },
                   ),
                 ),
@@ -87,8 +85,6 @@ class DetailScreen extends StatelessWidget {
               builder: (context) {
                 return new AddEditScreen(
                   key: AppKeys.editEventScreen,
-                  updateEvent: updateEvent,
-                  addEvent: addEvent,
                   event: event,
                 );
               },

@@ -41,7 +41,9 @@ main() {
       ];
       final state = new AppState(events: events);
 
-      expect(state.filteredEvents(VisibilityFilter.all), events);
+      state.activeFilter = VisibilityFilter.all;
+
+      expect(state.filteredEvents(), events);
     });
 
     test('should return completed events if the VisibilityFilter is completed', () {
@@ -56,7 +58,9 @@ main() {
       ];
       final state = new AppState(events: events);
 
-      expect(state.filteredEvents(VisibilityFilter.completed), [event3]);
+      state.activeFilter = VisibilityFilter.completed;
+
+      expect(state.filteredEvents(), [event3]);
     });
 
     test('should return active events if the VisibilityFilter is completed', () {
@@ -71,7 +75,9 @@ main() {
       ];
       final state = new AppState(events: events);
 
-      expect(state.filteredEvents(VisibilityFilter.active), [event1, event2]);
+      state.activeFilter;
+
+      expect(state.filteredEvents(), [event1, event2]);
     });
 
     test('should return active events if the VisibilityFilter is completed', () {

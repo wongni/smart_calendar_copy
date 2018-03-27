@@ -10,7 +10,7 @@ class EventsRepository {
   final FileStorage fileStorage;
   final WebClient webClient;
 
-  EventsRepository({
+  const EventsRepository({
     @required this.fileStorage,
     this.webClient = const WebClient(),
   });

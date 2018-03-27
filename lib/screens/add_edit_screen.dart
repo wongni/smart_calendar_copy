@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:smart_calendar_copy/keys.dart';
 import 'package:smart_calendar_copy/models.dart';
-import 'package:smart_calendar_copy/typedefs.dart';
+import 'package:smart_calendar_copy/state_container.dart';
 
 class AddEditScreen extends StatelessWidget {
   static final formKey = new GlobalKey<FormState>();
@@ -12,21 +11,19 @@ class AddEditScreen extends StatelessWidget {
   static final noteKey = new GlobalKey<FormFieldState<String>>();
 
   final Event event;
-  final EventAdder addEvent;
-  final EventUpdater updateEvent;
 
   bool get isEditing => event != null;
 
   AddEditScreen({
     Key key,
     this.event,
-    @required this.addEvent,
-    @required this.updateEvent,
   })
       : super(key: key ?? AppKeys.addEventScreen);
 
   @override
   Widget build(BuildContext context) {
+    final container = StateContainer.of(context);
+
     return new Scaffold(
       appBar: new AppBar(
         title: new Text(isEditing ? 'Edit Event' : 'Add Event'),
@@ -75,9 +72,9 @@ class AddEditScreen extends StatelessWidget {
             final note = noteKey.currentState.value;
 
             if (isEditing) {
-              updateEvent(event, name: name, note: note);
+              container.updateEvent(event, name: name, note: note);
             } else {
-              addEvent(new Event(
+              container.addEvent(new Event(
                 name,
                 note: note,
               ));

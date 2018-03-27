@@ -4,10 +4,12 @@ import 'package:uuid/uuid.dart';
 class AppState {
   bool isLoading;
   List<Event> events;
+  VisibilityFilter activeFilter;
 
   AppState({
     this.isLoading = false,
     this.events = const [],
+    this.activeFilter = VisibilityFilter.all,
   });
 
   factory AppState.loading() => new AppState(isLoading: true);
@@ -17,7 +19,7 @@ class AppState {
     return 'AppState{event:$events, isLoading: $isLoading}';
   }
 
-  List<Event> filteredEvents(VisibilityFilter activeFilter) {
+  List<Event> filteredEvents() {
     return events.where((event) {
       switch (activeFilter) {
         case VisibilityFilter.all:
@@ -40,8 +42,12 @@ class AppState {
   }
 
   bool get allComplete => events.every((event) => event.complete);
+
   bool get hasCompletedEvents => events.any((event) => event.complete);
-  int get numActive => events.fold(0, (sum, event) => event.complete ? sum : sum + 1);
+
+  int get numActive =>
+      events.fold(0, (sum, event) => event.complete ? sum : sum + 1);
+
   int get numCompleted => events.length - numActive;
 }
 

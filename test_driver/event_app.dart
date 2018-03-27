@@ -4,5 +4,5 @@ import 'package:smart_calendar_copy/main.dart' as app;
 void main() {
   enableFlutterDriverExtension();
 
-  app.main(integrationTest: true);
+  app.main();
 }

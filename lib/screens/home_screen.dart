@@ -1,90 +1,54 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:smart_calendar_copy/keys.dart';
 import 'package:smart_calendar_copy/localization.dart';
 import 'package:smart_calendar_copy/models.dart';
 import 'package:smart_calendar_copy/routes.dart';
+import 'package:smart_calendar_copy/state_container.dart';
+import 'package:smart_calendar_copy/widgets/event_list.dart';
 import 'package:smart_calendar_copy/widgets/extra_actions_button.dart';
 import 'package:smart_calendar_copy/widgets/filter_button.dart';
-import 'package:smart_calendar_copy/typedefs.dart';
-import 'package:smart_calendar_copy/widgets/event_list.dart';
 import 'package:smart_calendar_copy/widgets/states_counter.dart';
 
 class HomeScreen extends StatefulWidget {
-  final AppState appState;
-  final EventAdder addEvent;
-  final EventRemover removeEvent;
-  final EventUpdater updateEvent;
-  final Function toggleAll;
-  final Function clearCompleted;
-
-  HomeScreen({
-    @required this.appState,
-    @required this.addEvent,
-    @required this.removeEvent,
-    @required this.updateEvent,
-    @required this.toggleAll,
-    @required this.clearCompleted,
-    Key key,
-  })
-      : super(key: AppKeys.homeScreen);
+  HomeScreen() : super(key: AppKeys.homeScreen);
 
   @override
   _HomeScreenState createState() => new _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  VisibilityFilter activeFilter = VisibilityFilter.all;
   AppTab activeTab = AppTab.events;
 
-  _updateVisibility(VisibilityFilter filter) {
-    setState(() {
-      activeFilter = filter;
-    });
-  }
-
-  _updateTab(AppTab tab) {
-    setState(() {
-      activeTab = tab;
-    });
-  }
+  _updateTab(AppTab tab) => setState(() => activeTab = tab);
 
   @override
   Widget build(BuildContext context) {
+    final container = StateContainer.of(context);
+    final state = container.state;
+
     return new Scaffold(
       appBar: new AppBar(
         title: new Text(AppLocalizations.of(context).appTitle),
         actions: <Widget>[
           new FilterButton(
             isActive: activeTab == AppTab.events,
-            activeFilter: activeFilter,
-            onSelected: _updateVisibility,
+            activeFilter: state.activeFilter,
+            onSelected: container.updateVisibilityFilter,
           ),
           new ExtraActionsButton(
-            allComplete: widget.appState.allComplete,
-            hasCompletedEvents: widget.appState.hasCompletedEvents,
+            allComplete: state.allComplete,
+            hasCompletedEvents: state.hasCompletedEvents,
             onSelected: (action) {
               if (action == ExtraAction.toggleAllComplete) {
-                widget.toggleAll();
+                container.toggleAll();
               } else if (action == ExtraAction.clearCompleted) {
-                widget.clearCompleted();
+                container.clearCompleted();
               }
             },
           ),
         ],
       ),
-      body: activeTab == AppTab.events
-          ? new EventList(
-              events: widget.appState.filteredEvents(activeFilter),
-              loading: widget.appState.isLoading,
-              removeEvent: widget.removeEvent,
-              addEvent: widget.addEvent,
-              updateEvent: widget.updateEvent,
-            )
-          : new StatsCounter(
-              numActive: widget.appState.numActive,
-              numCompleted: widget.appState.numCompleted,
-            ),
+      body: activeTab == AppTab.events ? new EventList() : new StatsCounter(),
       floatingActionButton: new FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, AppRoutes.addEvent);
