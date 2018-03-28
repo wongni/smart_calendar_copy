@@ -13,7 +13,7 @@ class Event {
       : this.id = id ?? new Uuid().v4();
 
   Event copyWith(
-      {bool complete, String id, String name, String task, bool allDay}) {
+      {bool complete, String id, String name, String note, bool allDay}) {
     return new Event(
       name ?? this.name,
       note: note ?? this.note,

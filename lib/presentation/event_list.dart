@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_calendar_copy/containers/app_loading.dart';
+import 'package:smart_calendar_copy/containers/event_details.dart';
 import 'package:smart_calendar_copy/keys.dart';
 import 'package:smart_calendar_copy/models/models.dart';
 import 'package:smart_calendar_copy/presentation/event_item.dart';
@@ -49,9 +50,24 @@ class EventList extends StatelessWidget {
 
   _removeEvent(BuildContext context, Event event) {
     onRemove(event);
+    _showSnackbar(context, event);
+  }
 
+  _onEventTab(BuildContext context, Event event) {
+    Navigator
+        .of(context)
+        .push(
+          new MaterialPageRoute(
+            builder: (context) => new EventDetails(id: event.id),
+          ),
+        )
+        .then((removedEvent) => _showSnackbar(context, removedEvent));
+  }
+
+  _showSnackbar(context, event) {
     Scaffold.of(context).showSnackBar(
           new SnackBar(
+            key: AppKeys.snackbar,
             duration: new Duration(seconds: 2),
             backgroundColor: Theme.of(context).backgroundColor,
             content: new Text(
@@ -65,9 +81,5 @@ class EventList extends StatelessWidget {
             ),
           ),
         );
-  }
-
-  _onEventTab(BuildContext context, Event event) {
-    print('$event tabbed');
   }
 }
